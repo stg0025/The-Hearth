@@ -13,7 +13,7 @@ def plot_craving_curve(intensity_readings):
     """
 
     # Create x axis with minute intervals
-    x = list(range(1, len(intensity_readings)))
+    x = list(range(1, len(intensity_readings) + 1))
 
     # Plot x against intensity_readings as a line chart
     plt.plot(x, intensity_readings, marker='o')
@@ -45,3 +45,5 @@ def show_dashboard(user_id):
     table.add_row(str(len(sessions)), str(streak))
     console.print(table)
 
+if __name__ == "__main__":
+    show_dashboard(1)

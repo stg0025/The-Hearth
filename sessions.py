@@ -15,27 +15,30 @@ def daily_checkin(user_id):
         user_id: identifier for the user initiating the session.
     """
 
-    # Show the safety message first.
     print(SAFETY_PROMPT)
 
-    # Require an explicit Enter keypress to continue.
     input("It's time to check in for the day. Take your time. Press Enter whenever you're ready...")
+    print()
 
-    # Offer a list of emotions and let the user select multiple entries.
     first_attempt = True
     while True:
         if first_attempt:
-            print("How are you doing today? Select any emotions you're feeling today, separated by commas:")
+            print("How are you doing today? Select any emotions you're feeling today:")
+            print("---------------------------------------")
         else:
             print("Pick at least one — there's no wrong answer:")
+            print("---------------------------------------")
         for i, emotion in enumerate(EMOTIONS):
             print(f"{i + 1}. {emotion}")
-        emotion_choices = input("Enter the numbers of the emotions you are feeling: ")
+        print()
+        emotion_choices = input("Enter the numbers of the emotions you are feeling, separated by commas: ")
+        print()
 
         try:
             emotion_indices = [int(x.strip()) - 1 for x in emotion_choices.split(",")]
         except ValueError:
             print("Just enter the numbers from the list, separated by commas.")
+            print()
             first_attempt = False
             continue
 
@@ -48,21 +51,25 @@ def daily_checkin(user_id):
         else:
             break
 
-    # Offer a list of needs and let the user select multiple entries.
     first_attempt = True
     while True:
         if first_attempt:
             print("Now, what feels unmet right now? Select as many as feel true:")
+            print("---------------------------------------")
         else:
             print("Pick at least one need from the list:")
+            print("---------------------------------------")
         for i, need in enumerate(NEEDS):
             print(f"{i + 1}. {need}")
-        needs_choices = input("Enter the numbers of the needs you are feeling: ")
+        print()
+        needs_choices = input("Enter the numbers of the needs you are feeling, separated by commas: ")
+        print()
 
         try:
             needs_indices = [int(x.strip()) - 1 for x in needs_choices.split(",")]
         except ValueError:
             print("Just enter the numbers from the list, separated by commas.")
+            print()
             first_attempt = False
             continue
 
@@ -75,14 +82,15 @@ def daily_checkin(user_id):
         else:
             break
 
-    # Ask about relapse and notes.
     relapsed = 1 if input("Did you relapse today? (y/n): ").strip().lower() == "y" else 0
+    print()
 
-    notes = input("Anything else you want to note? There is no pressure, you can always press Enter to skip: ").strip()
+    notes = input("Anything else you want to note? You can always press Enter to skip: ").strip()
+    print()
 
-    # Log the session to the database.
     log_session(user_id, ", ".join(selected_emotions), ", ".join(selected_needs), relapsed, notes)
-    print("Thanks for checking in. Even checking in is a win, keep up the good work! See you tomorrow.")
+    print("Thanks for checking in. Even checking in is a win. See you tomorrow.")
+
 
 def craving_session(user_id):
     """Launch an immediate urge surfing session when a craving hits.
@@ -97,28 +105,34 @@ def craving_session(user_id):
     Args:
         user_id: identifier for the user initiating the session.
     """
+
     print("Take a deep breath. Let's surf this urge together. Type 'done' when you're ready to stop.")
+    print()
     print("First, how are you feeling right now?")
-    # Offer the emotions list again for the user to select from.
+    print("---------------------------------------")
     for i, emotion in enumerate(EMOTIONS):
         print(f"{i + 1}. {emotion}")
+    print()
     emotion_choice = input("Enter the number of the emotion you're feeling: ")
+    print()
+
     try:
         emotion_index = int(emotion_choice.strip()) - 1
         selected_emotion = EMOTIONS[emotion_index] if 0 <= emotion_index < len(EMOTIONS) else "unknown"
     except ValueError:
         selected_emotion = "unknown"
 
-    print("Let's get through these urges together. For a while, I'll ask you to rate your craving intensity on a scale of 1 to 10. ")
-    print("Remember, it's okay to feel this way. Just do your best to stay present and ride it out.")
-    
-    # Create a minute counter starting at 0, a list called intensity_readings to store results, a while loop that stops at 20 minutes, or waiting for done
+    print("For the next few minutes, rate your craving intensity on a scale of 1 to 10.")
+    print("It's okay to feel this way. Stay present and ride it out.")
+    print()
+
     minute_counter = 0
     intensity_readings = []
     while minute_counter < 20:
-        user_input = input(f"Minute {minute_counter + 1}: Rate your craving intensity (1-10): ")
+        user_input = input(f"Minute {minute_counter + 1}: Rate your craving intensity (1-10), or type 'done' to stop: ")
         if user_input.lower() == "done":
-            print("Great job riding that out. Remember, cravings are temporary and you have the strength to get through them.")
+            print()
+            print("Great job riding that out. Cravings are temporary — you have the strength to get through them.")
             break
         try:
             intensity = int(user_input)
@@ -126,13 +140,17 @@ def craving_session(user_id):
                 intensity_readings.append(intensity)
             else:
                 print("Please enter a number between 1 and 10.")
+                continue
         except ValueError:
             print("Please enter a valid number.")
+            continue
         minute_counter += 1
         print("Hang in there. Check back in 60 seconds...")
+        print()
         time.sleep(60)
+
     session_id = log_session(user_id, selected_emotion, "craving session", 0)
     for i, intensity in enumerate(intensity_readings):
         log_intensity(session_id, i + 1, intensity)
-    print("Session saved. Well done for riding it out.")
-
+    print()
+    print("Session saved.")
