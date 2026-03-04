@@ -1,5 +1,3 @@
-import argparse
-from html import parser
 from sessions import daily_checkin, craving_session
 from display import show_dashboard
 from db import create_tables, create_user, get_user
@@ -7,11 +5,11 @@ from db import create_tables, create_user, get_user
 def main():
     create_tables()
     # Get or create user
-    name = input("Welcome to The Hearth. What is your name? ").strip()
+    name = input("Welcome to The Hearth. What should I call you? ").strip()
     user = get_user(name)
     
     if not user:
-        addiction_type = input("What are you working on? (e.g. food, pornography, gambling): ").strip()
+        addiction_type = input("What can I help you with? (e.g. food, pornography, gambling): ").strip()
         user_id = create_user(name, addiction_type)
     else:
         user_id = user[0]
