@@ -1,5 +1,7 @@
 import sqlite3
+import bcrypt
 from datetime import datetime
+
 
 DB_PATH = "cravify.db"
 
@@ -15,6 +17,7 @@ def create_tables():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             name TEXT NOT NULL,
             addiction_type TEXT NOT NULL,
+            password_hash BLOB NOT NULL,
             created_at TEXT NOT NULL
         )
     """)
@@ -42,20 +45,17 @@ def create_tables():
         )
     """)
 
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS hash (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            user_id INTEGER NOT NULL,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+        )
+    """)
+
     conn.commit()
     conn.close()
 
-def create_user(name, addiction_type):
-    conn = get_connection()
-    cursor = conn.cursor()
-    cursor.execute(
-        "INSERT INTO users (name, addiction_type, created_at) VALUES (?, ?, ?)",
-        (name, addiction_type, datetime.now().isoformat())
-    )
-    conn.commit()
-    user_id = cursor.lastrowid
-    conn.close()
-    return user_id
 
 def get_user(name):
     conn = get_connection()
@@ -132,6 +132,41 @@ def get_streak(user_id):
         else:
             break
     return streak
+
+
+def create_user(name, addiction_type, password):
+    """Create a new user in the database 
+    with a password using bcrypt."""
+
+    password_bytes = password.encode('utf-8')
+    salt = bcrypt.gensalt()
+    password_hash = bcrypt.hashpw(password_bytes, salt)
+
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "INSERT INTO users (name, addiction_type, password_hash, created_at) VALUES (?, ?, ?, ?)",
+        (name, addiction_type, password_hash, datetime.now().isoformat())
+    )
+    conn.commit()
+    user_id = cursor.lastrowid
+    conn.close()
+    return user_id
+
+def verify_user(name, password):
+    """Verify a user's password during login."""
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute("SELECT * FROM users WHERE name = ?", (name,))
+    result = cursor.fetchone()
+    conn.close()
+
+    if result:
+        stored_hash = result[3]  # password_hash column index
+        password_bytes = password.encode('utf-8')
+        if bcrypt.checkpw(password_bytes, stored_hash):
+            return result
+    return None
 
 if __name__ == "__main__":
     create_tables()

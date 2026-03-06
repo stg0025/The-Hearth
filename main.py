@@ -1,19 +1,27 @@
 from sessions import daily_checkin, craving_session
 from display import show_dashboard
-from db import create_tables, create_user, get_user
+from db import create_tables, create_user, get_user, verify_user
 
 def main():
     create_tables()
-    # Get or create user
+
     name = input("Welcome to The Hearth. What should I call you? ").strip()
-    user = get_user(name)
-    
-    if not user:
-        addiction_type = input("What can I help you with? (e.g. food, pornography, gambling): ").strip()
-        user_id = create_user(name, addiction_type)
+    while not name:
+        print("Please enter a name to continue.")
+        name = input("Enter your name: ").strip()
+    if get_user(name):
+        password = input("Enter password: ")
+        user = verify_user(name, password)
+        while not user:
+            print("Incorrect password. Please try again.")
+            password = input("Enter password: ")
+            user = verify_user(name, password)
+        user_id = user[0] 
     else:
-        user_id = user[0]
-    
+        password = input("Let's create a password: ")
+        addiction_type = input("What can I help you with? (e.g. food, pornography, gambling, etc): ").strip()
+        user_id = create_user(name, addiction_type, password)
+
     # Menu
     print()
     print("What would you like to do?")
