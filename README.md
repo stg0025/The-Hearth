@@ -18,7 +18,7 @@ It helps users identify what they are feeling and what unmet needs they may be m
 
 ## Installation
 ```
-pip install rich matplotlib
+pip install rich matplotlib bcrypt
 ```
 
 ## Running the App
