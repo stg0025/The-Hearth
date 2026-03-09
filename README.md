@@ -2,10 +2,11 @@
 
 The Hearth is a psychology-informed behavioral addiction tool.
 It helps users identify what they are feeling and what unmet needs they may be medicating through compulsive behavior.
+The approach is trauma-informed and focuses on unmet needs rather than surface level behavior.
 
 ## Psychology Frameworks
 
-- **Cowen & Keltner's 27-category emotion taxonomy** — a empirically validated model of human emotion used for daily check-ins
+- **Cowen & Keltner's 27-category emotion taxonomy** — an empirically validated model of human emotion used for daily check-ins
 - **ACT Urge Surfing** — an Acceptance and Commitment Therapy technique for riding out cravings without acting on them
 - **NVC Needs Inventory** — Marshall Rosenberg's Nonviolent Communication framework used to identify unmet psychological needs underlying compulsive behavior
 
@@ -16,15 +17,29 @@ It helps users identify what they are feeling and what unmet needs they may be m
 - Urge surfing assistant to help ride out cravings in real time
 - Craving intensity visualizations over time
 
+## Security
+
+- This application uses bcrypt for secure password hashing. 
+- When a user creates an account, their password is hashed with a unique salt before being stored in the database. 
+- During login, the entered password is hashed and compared to the stored hash, ensuring that plaintext passwords are never stored or transmitted.
+- db.py uses ? placeholders in every query to prevent SQL Injection
+- All data is stored locally in SQLite with no network exposure for V1
+
 ## Installation
 ```
-pip install rich matplotlib bcrypt
+pip install rich matplotlib bcrypt pandas
 ```
 
 ## Running the App
 ```
 python main.py
 ```
+## Roadmap
+
+- Data exporting to csv
+- FastAPI backend and React frontend
+- PostgreSQL migration for multi-user deployment
+- ML relapse predictions
 
 ## Important Note
 
