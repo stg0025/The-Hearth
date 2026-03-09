@@ -7,6 +7,8 @@ from sessions import daily_checkin, craving_session
 def main():
     create_tables()
     user_id = login_or_register()
+    if user_id is None:
+        return
 
     # Menu
     print()
