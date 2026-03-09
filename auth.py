@@ -1,6 +1,6 @@
 import getpass
-import sqlite3
-from db import get_connection
+from db import create_user, get_user, verify_user
+
 
 def get_new_password():
     '''
@@ -22,3 +22,21 @@ def get_new_password():
         return password
         
 
+def login_or_register():
+    name = input("Welcome to The Hearth. What should I call you? ").strip()
+    while not name:
+        print("Please enter a name to continue.")
+        name = input("Enter your name: ").strip()
+    if get_user(name):
+        password = getpass.getpass("Enter password: ")
+        user = verify_user(name, password)
+        while not user:
+            print("Incorrect password. Please try again.")
+            password = getpass.getpass("Enter password: ")
+            user = verify_user(name, password)
+        user_id = user[0] 
+    else:
+        password = get_new_password()
+        addiction_type = input("What can I help you with? (e.g. food, pornography, gambling, etc): ").strip()
+        user_id = create_user(name, addiction_type, password)
+    return user_id

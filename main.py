@@ -1,28 +1,12 @@
 import getpass
-from auth import get_new_password
-from sessions import daily_checkin, craving_session
+from auth import login_or_register
 from display import show_dashboard
-from db import create_tables, create_user, get_user, verify_user
+from db import create_tables
+from sessions import daily_checkin, craving_session
 
 def main():
     create_tables()
-    #login() called from auth.py
-    name = input("Welcome to The Hearth. What should I call you? ").strip()
-    while not name:
-        print("Please enter a name to continue.")
-        name = input("Enter your name: ").strip()
-    if get_user(name):
-        password = getpass.getpass("Enter password: ")
-        user = verify_user(name, password)
-        while not user:
-            print("Incorrect password. Please try again.")
-            password = getpass.getpass("Enter password: ")
-            user = verify_user(name, password)
-        user_id = user[0] 
-    else:
-        password = get_new_password()
-        addiction_type = input("What can I help you with? (e.g. food, pornography, gambling, etc): ").strip()
-        user_id = create_user(name, addiction_type, password)
+    user_id = login_or_register()
 
     # Menu
     print()
@@ -35,7 +19,7 @@ def main():
     choice = input("Enter 1, 2, 3, or 4: ").strip()
     
     while choice not in ["1", "2", "3", "4"]:
-        print("Invalid choice. Run the app again and enter 1, 2, 3, or 4.")
+        print("Invalid choice. Please enter 1, 2, 3, or 4.")
         choice = input("Enter 1, 2, 3, or 4: ").strip()
 
     if choice == "1":
