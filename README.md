@@ -36,7 +36,7 @@ python main.py
 ```
 ## Roadmap
 
-- Data exporting to csv
+- ~~Data exporting to CSV~~ — complete
 - FastAPI backend and React frontend
 - PostgreSQL migration for multi-user deployment
 - ML relapse predictions
