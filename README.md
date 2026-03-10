@@ -36,10 +36,16 @@ python main.py
 ```
 ## Roadmap
 
-- ~~Data exporting to CSV~~ — complete
-- FastAPI backend and React frontend
-- PostgreSQL migration for multi-user deployment
-- ML relapse predictions
+- ~~Data exporting to CSV~~ - complete
+- ~~FastAPI backend~~ - complete
+- JWT authentication and brute force lockout
+- Structured audit logging
+- Docker containerization
+- GitHub Actions CI/CD pipeline
+- React frontend
+- PostgreSQL migration
+- Next.js migration
+- ML relapse prediction
 
 ## Important Note
 
