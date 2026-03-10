@@ -40,11 +40,10 @@ python main.py
 - ~~FastAPI backend~~ - complete
 - JWT authentication and brute force lockout
 - Structured audit logging
+- PostgreSQL migration
 - Docker containerization
 - GitHub Actions CI/CD pipeline
-- React frontend
-- PostgreSQL migration
-- Next.js migration
+- React frontend for easy to use UI
 - ML relapse prediction
 
 ## Important Note
