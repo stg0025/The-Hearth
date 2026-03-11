@@ -13,7 +13,7 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 ## Features
 
 - Daily emotion and needs check-in based on Cowen & Keltner's 27 emotions
-- Sobriety streak tracker
+- Total day log
 - Urge surfing assistant to help ride out cravings in real time
 - Craving intensity visualizations over time
 
