@@ -96,9 +96,9 @@ def craving_session(user_id):
     """Launch an immediate urge surfing session when a craving hits.
 
     The procedure includes:
-      1. Starting a 60-second interval timer immediately.
+      1. Starting a 5 minute interval timer immediately.
       2. Recording craving intensity (1-10) at each interval.
-      3. Stopping after 20 minutes or when the user types done.
+      3. Stopping after 30 minutes or when the user types done.
       4. Displaying a craving curve at the end of the session.
       5. Logging all intensity readings to the database.
 
@@ -126,10 +126,12 @@ def craving_session(user_id):
     print("It's okay to feel this way. Stay present and ride it out.")
     print()
 
-    minute_counter = 0
+    interval_counter = 0
     intensity_readings = []
-    while minute_counter < 20:
-        user_input = input(f"Minute {minute_counter + 1}: Rate your craving intensity (1-10), or type 'done' to stop: ")
+    session_id = log_session(user_id, selected_emotion, "craving session", 0)
+
+    while interval_counter < 6:
+        user_input = input(f"Interval {interval_counter + 1}: Rate your craving intensity (1-10), or type 'done' to stop: ")
         if user_input.lower() == "done":
             print()
             print("Great job riding that out. Cravings are temporary — you have the strength to get through them.")
@@ -138,18 +140,24 @@ def craving_session(user_id):
             intensity = int(user_input)
             if 1 <= intensity <= 10:
                 intensity_readings.append(intensity)
+                if intensity == 1:
+                    print("Looks like the craving has mostly subsided. Great work riding that out!")
+                    for i, intensity in enumerate(intensity_readings):
+                        log_intensity(session_id, i + 1, intensity)
+                    print()
+                    print("Session saved.")
+                    return
             else:
                 print("Please enter a number between 1 and 10.")
                 continue
         except ValueError:
             print("Please enter a valid number.")
             continue
-        minute_counter += 1
-        print("Hang in there. Check back in 60 seconds...")
+        interval_counter += 1
+        print("Hang in there. Check back in 5 minutes...")
         print()
-        time.sleep(60)
+        time.sleep(300)
 
-    session_id = log_session(user_id, selected_emotion, "craving session", 0)
     for i, intensity in enumerate(intensity_readings):
         log_intensity(session_id, i + 1, intensity)
     print()
