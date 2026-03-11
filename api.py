@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
-from db import create_user, get_all_sessions, get_streak, get_user, verify_user, log_session
+from db import create_user, get_all_sessions, get_days, get_user, verify_user, log_session
 
 class RegisterModel(BaseModel):
     name : str
@@ -50,6 +50,6 @@ def craving(data: CravingModel):
 
 @app.get("/dashboard")
 def dashboard(user_id: int):
-    streak = get_streak(user_id)
+    days = get_days(user_id)
     sessions = get_all_sessions(user_id)
-    return {"message": "Dashboard data retrieved successfully", "streak": streak, "sessions": sessions}
+    return {"message": "Dashboard data retrieved successfully", "days": days, "sessions": sessions}

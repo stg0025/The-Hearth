@@ -1,7 +1,7 @@
 import matplotlib.pyplot as plt
 from rich.console import Console
 from rich.table import Table
-from db import get_all_sessions, get_streak
+from db import get_all_sessions, get_days
 
 
 
@@ -31,18 +31,18 @@ def plot_craving_curve(intensity_readings):
 
 def show_dashboard(user_id):
     """
-    Displays dashboard featuring streak and total sessions
+    Displays dashboard featuring total days and total sessions
     Use rich to create a formatted table with colors and styling
     Color themes include warm colors like orange, brown, red, yellow to feel cozy and inviting
     """
 
     console = Console()
     sessions = get_all_sessions(user_id)
-    streak = get_streak(user_id)
+    days = get_days(user_id)
     table = Table(title="The Hearth Dashboard", style="bold white on red")
     table.add_column("Total Sessions", justify="center", style="bright_white")
-    table.add_column("Current Streak (days)", justify="center", style="bold yellow")
-    table.add_row(str(len(sessions)), str(streak))
+    table.add_column("Days showed up", justify="center", style="bold yellow")
+    table.add_row(str(len(sessions)), str(days))
     console.print(table)
 
 if __name__ == "__main__":

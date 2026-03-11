@@ -111,27 +111,20 @@ def get_intensity_log(session_id):
     conn.close()
     return log
 
-def get_streak(user_id):
+def get_days(user_id):
     conn = get_connection()
     cursor = conn.cursor()
     cursor.execute(
-        """SELECT DATE(timestamp), MIN(relapsed) 
+        """SELECT COUNT(DISTINCT(date(timestamp)))
         FROM sessions 
-        WHERE user_id = ? 
-        GROUP BY DATE(timestamp) 
-        ORDER BY DATE(timestamp) DESC""",
+        WHERE user_id = ? """,
         (user_id,)
     )
     rows = cursor.fetchall()
     conn.close()
 
-    streak = 0
-    for row in rows:
-        if row[1] == 0:
-            streak += 1
-        else:
-            break
-    return streak
+    days = rows[0][0] if rows else 0
+    return days
 
 
 def create_user(name, addiction_type, password):
