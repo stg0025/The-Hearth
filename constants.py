@@ -29,6 +29,7 @@ EMOTIONS = [
 ]
 
 NEEDS = [
+
     # Connection
     "connection",
     "intimacy",
@@ -46,16 +47,20 @@ NEEDS = [
     "autonomy",
     "competence",
     "purpose",
+    "honesty",
     
     # Rest / Regulation
     "rest",
     "comfort",
     "relief from pain",
+    "peace",
     
     # Stimulation
     "stimulation",
     "excitement",
     "novelty",
+    "play",
+    "beauty",
     
     # Meaning
     "meaning",
