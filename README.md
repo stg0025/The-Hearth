@@ -24,11 +24,12 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 - During login, the entered password is hashed and compared to the stored hash, ensuring that plaintext passwords are never stored or transmitted.
 - db.py uses ? placeholders in every query to prevent SQL Injection
 - All data is stored locally in SQLite with no network exposure for V1
+- JWT authentication with 24hr expiry, SECRET_KEY stored in environment variable
+- Protected endpoints: /checkin, /craving, /dashboard require valid bearer token
 
 ## Installation
 ```
-pip install rich matplotlib bcrypt pandas
-```
+pip install rich matplotlib bcrypt pandas fastapi uvicorn PyJWT python-dotenv```
 
 ## Running the App
 ```
@@ -38,7 +39,8 @@ python main.py
 
 - ~~Data exporting to CSV~~ - complete
 - ~~FastAPI backend~~ - complete
-- JWT authentication and brute force lockout
+- ~~JWT authentication~~ - complete
+- Brute force lockout
 - Structured audit logging
 - PostgreSQL migration
 - Docker containerization
