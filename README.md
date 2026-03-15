@@ -29,7 +29,8 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 
 ## Installation
 ```
-pip install rich matplotlib bcrypt pandas fastapi uvicorn PyJWT python-dotenv```
+pip install rich matplotlib bcrypt pandas fastapi uvicorn PyJWT python-dotenv
+```
 
 ## Running the App
 ```
