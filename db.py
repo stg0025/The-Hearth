@@ -1,6 +1,6 @@
 import sqlite3
 import bcrypt
-from datetime import datetime
+from datetime import datetime, timedelta
 
 
 DB_PATH = "cravify.db"
@@ -51,6 +51,16 @@ def create_tables():
             user_id INTEGER NOT NULL,
             FOREIGN KEY (user_id) REFERENCES users(id)
         )
+    """)
+
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS login (
+            user_id INTEGER PRIMARY KEY,
+            failed_attempts INTEGER NOT NULL,
+            last_failed_attempt TEXT,
+            lockout_until TEXT,
+            FOREIGN KEY (user_id) REFERENCES users(id)
+         )
     """)
 
     conn.commit()
@@ -160,6 +170,47 @@ def verify_user(name, password):
         if bcrypt.checkpw(password_bytes, stored_hash):
             return result
     return None
+
+def record_failed_attempt(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        """INSERT INTO login (user_id, failed_attempts, last_failed_attempt)
+        VALUES (?, 1, ?)
+        ON CONFLICT(user_id) DO UPDATE SET 
+        failed_attempts = failed_attempts + 1,
+        last_failed_attempt = ?""",
+        (user_id, datetime.now().isoformat(), datetime.now().isoformat())
+    )
+    conn.commit()
+    cursor.execute(
+        "SELECT failed_attempts FROM login WHERE user_id = ?",
+        (user_id,)
+    )
+    result = cursor.fetchone()
+    if result and result[0] >= 5:
+        cursor.execute(
+            "UPDATE login SET locked_until = ? WHERE user_id = ?",
+            ((datetime.now() + timedelta(minutes=15)).isoformat(), user_id)
+        )
+        conn.commit()
+    conn.close()
+
+def check_lockout(user_id):
+    conn = get_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "SELECT lockout_until FROM login WHERE user_id = ?",
+        (user_id,)
+    )
+    result = cursor.fetchone()
+    conn.close()
+
+    if result and result[0]:
+        lockout_until = datetime.fromisoformat(result[0])
+        if lockout_until > datetime.now():
+            return lockout_until
+    return False
 
 if __name__ == "__main__":
     create_tables()
