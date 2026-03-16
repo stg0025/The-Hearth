@@ -1,5 +1,5 @@
 import getpass
-from db import create_user, get_user, verify_user
+from db import check_lockout, create_user, get_user, verify_user, record_failed_attempt
 
 
 def get_new_password():
@@ -42,13 +42,31 @@ def login():
             name = input("Enter your name (or 0 to go back): ").strip()
             if name == "0":
                 return None
-            if get_user(name):
+            # 1. Get username
+            # 2. Check if user exists
+            # 3. Call check_lockout once, store result in variable
+            # 4. If result is truthy, print locked message with timestamp, continue
+            # 5. Ask for password
+            # 6. Call verify_user
+            # 7. If wrong password: call record_failed_attempt, ask again
+            # 8. If correct password: return user_id
+
+            does_user_exist = get_user(name)
+            if does_user_exist:
+                lockout_status = check_lockout(user_id=does_user_exist[0])
+                if lockout_status:
+                    print(f"Account locked until {lockout_status}")
+                    continue
                 password = getpass.getpass("Enter password: ")
                 user = verify_user(name, password)
                 while not user:
+                    record_failed_attempt(does_user_exist[0])
                     print("Incorrect password. Please try again.")
                     password = getpass.getpass("Enter password: ")
                     user = verify_user(name, password)
+                    if check_lockout(user_id=does_user_exist[0]):
+                        print("Too many failed attempts. Account locked for 15 minutes.")
+                        return None
                 return user[0] 
             else:
                 print("User not found. Please register first.")
