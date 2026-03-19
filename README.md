@@ -41,12 +41,12 @@ python main.py
 - ~~Data exporting to CSV~~ - complete
 - ~~FastAPI backend~~ - complete
 - ~~JWT authentication~~ - complete
-- Brute force lockout
+- ~~Brute force lockout~~ - complete
+- React frontend for easy to use UI
 - Structured audit logging
 - PostgreSQL migration
 - Docker containerization
 - GitHub Actions CI/CD pipeline
-- React frontend for easy to use UI
 - ML relapse prediction
 
 ## Important Note
