@@ -48,7 +48,7 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 ### Backend
 
 ```bash
-cd Hearth-Backend
+cd hearth-backend
 pip install fastapi uvicorn bcrypt PyJWT python-dotenv rich matplotlib pandas
 ```
 
@@ -58,7 +58,7 @@ Initialize the database (first time only):
 python db.py
 ```
 
-Create a `.env` file inside `Hearth-Backend/`:
+Create a `.env` file inside `hearth-backend/`:
 
 ```
 SECRET_KEY=your-secret-key-here
@@ -82,7 +82,7 @@ Open two terminals.
 **Terminal 1 — backend:**
 
 ```bash
-cd Hearth-Backend
+cd hearth-backend
 python -m uvicorn api:app --reload
 ```
 
@@ -102,7 +102,7 @@ Open `http://localhost:5173` in your browser. The frontend proxies all API calls
 ### CLI (no frontend required)
 
 ```bash
-cd Hearth-Backend
+cd hearth-backend
 python main.py
 ```
 
@@ -126,7 +126,7 @@ Interactive API docs available at `http://127.0.0.1:8000/docs` when the backend 
 
 ```
 The-Hearth/
-├── Hearth-Backend/
+├── hearth-backend/
 │   ├── api.py           FastAPI app and route definitions
 │   ├── auth.py          Registration and login logic
 │   ├── auth_token.py    JWT creation and verification
