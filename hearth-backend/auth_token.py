@@ -5,8 +5,7 @@ from dotenv import load_dotenv
 from fastapi import HTTPException
 
 load_dotenv() 
-SECRET_KEY = os.environ.get("SECRET_KEY")
-
+SECRET_KEY = os.environ.get("SECRET_KEY", "changeme-local-dev-secret")
 def create_token(user_id):
     payload = {
         "user_id": user_id,

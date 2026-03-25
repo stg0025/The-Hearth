@@ -1,0 +1,121 @@
+.shell {
+  display: flex;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 200px;
+  flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 2rem 1.25rem;
+  gap: 2.5rem;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.flame {
+  color: var(--ember);
+  font-size: 0.75rem;
+  animation: flicker 2.4s ease-in-out infinite;
+}
+
+@keyframes flicker {
+  0%, 100% { opacity: 1; }
+  45%       { opacity: 0.6; }
+  50%       { opacity: 0.9; }
+  55%       { opacity: 0.5; }
+}
+
+.brandName {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--cream);
+  letter-spacing: 0.01em;
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+}
+
+.navLink {
+  font-family: var(--font-mono);
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--radius);
+  transition: var(--transition);
+}
+
+.navLink:hover {
+  color: var(--text);
+  background: var(--surface2);
+}
+
+.navLink.active {
+  color: var(--ember);
+  background: var(--surface2);
+}
+
+.userSection {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.username {
+  font-family: var(--font-mono);
+  font-size: 0.72rem;
+  color: var(--ash);
+  padding: 0 0.75rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.logoutBtn {
+  background: transparent;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  color: var(--ash);
+  padding: 0.4rem 0.75rem;
+  border-radius: var(--radius);
+  text-align: left;
+  border: 1px solid transparent;
+}
+
+.logoutBtn:hover {
+  color: var(--danger);
+  border-color: var(--danger);
+}
+
+.main {
+  flex: 1;
+  overflow-y: auto;
+  padding: 3rem 3.5rem;
+}
+
+@media (max-width: 640px) {
+  .shell { flex-direction: column; }
+  .sidebar {
+    width: 100%;
+    flex-direction: row;
+    padding: 1rem;
+    gap: 1rem;
+  }
+  .nav { flex-direction: row; }
+  .main { padding: 1.5rem; }
+}

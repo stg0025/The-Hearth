@@ -14,40 +14,159 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 
 - Daily emotion and needs check-in based on Cowen & Keltner's 27 emotions
 - Total day log
-- Urge surfing assistant to help ride out cravings in real time
-- Craving intensity visualizations over time
+- Urge surfing assistant with real-time 5-minute interval tracking
+- Relapse logging
+- React web frontend
+- CLI interface
+
+## Tech Stack
+
+**Backend:** Python, FastAPI, SQLite, bcrypt, PyJWT, python-dotenv  
+**Frontend:** React, Vite, Recharts, Axios
 
 ## Security
 
-- This application uses bcrypt for secure password hashing. 
-- When a user creates an account, their password is hashed with a unique salt before being stored in the database. 
-- During login, the entered password is hashed and compared to the stored hash, ensuring that plaintext passwords are never stored or transmitted.
-- db.py uses ? placeholders in every query to prevent SQL Injection
-- All data is stored locally in SQLite with no network exposure for V1
-- JWT authentication with 24hr expiry, SECRET_KEY stored in environment variable
-- Protected endpoints: /checkin, /craving, /dashboard require valid bearer token
+- bcrypt password hashing with unique salt per user
+- Plaintext passwords are never stored or transmitted
+- SQL injection prevention via `?` placeholders on all queries
+- JWT authentication with 24hr expiry
+- `SECRET_KEY` stored in environment variable
+- Protected endpoints (`/checkin`, `/craving`, `/dashboard`) require a valid bearer token
+- All data stored locally in SQLite with no network exposure in V1
+
+---
+
+## Prerequisites
+
+- Python 3.10+
+- Node.js 18+ — https://nodejs.org
+
+---
 
 ## Installation
+
+### Backend
+
+```bash
+cd Hearth-Backend
+pip install fastapi uvicorn bcrypt PyJWT python-dotenv rich matplotlib pandas
 ```
-pip install rich matplotlib bcrypt pandas fastapi uvicorn PyJWT python-dotenv
+
+Initialize the database (first time only):
+
+```bash
+python db.py
 ```
+
+Create a `.env` file inside `Hearth-Backend/`:
+
+```
+SECRET_KEY=your-secret-key-here
+```
+
+### Frontend
+
+```bash
+cd hearth-frontend
+npm install
+```
+
+---
 
 ## Running the App
+
+### Web (React frontend + FastAPI backend)
+
+Open two terminals.
+
+**Terminal 1 — backend:**
+
+```bash
+cd Hearth-Backend
+python -m uvicorn api:app --reload
 ```
+
+Backend runs at `http://127.0.0.1:8000`
+
+**Terminal 2 — frontend:**
+
+```bash
+cd hearth-frontend
+npm run dev
+```
+
+Frontend runs at `http://localhost:5173`
+
+Open `http://localhost:5173` in your browser. The frontend proxies all API calls to the backend automatically — no CORS configuration needed.
+
+### CLI (no frontend required)
+
+```bash
+cd Hearth-Backend
 python main.py
 ```
+
+---
+
+## API Endpoints
+
+| Method | Endpoint | Auth required | Description |
+|--------|----------|---------------|-------------|
+| POST | `/register` | No | Create account |
+| POST | `/login` | No | Login, returns JWT token |
+| POST | `/checkin` | Yes | Submit daily check-in |
+| POST | `/craving` | Yes | Log urge surfing session |
+| GET | `/dashboard` | Yes | Fetch days tracked and session history |
+
+Interactive API docs available at `http://127.0.0.1:8000/docs` when the backend is running.
+
+---
+
+## Project Structure
+
+```
+The-Hearth/
+├── Hearth-Backend/
+│   ├── api.py           FastAPI app and route definitions
+│   ├── auth.py          Registration and login logic
+│   ├── auth_token.py    JWT creation and verification
+│   ├── constants.py     Emotions and needs lists
+│   ├── db.py            Database setup and queries
+│   ├── display.py       CLI display helpers
+│   ├── export.py        CSV export
+│   ├── main.py          CLI entry point
+│   ├── sessions.py      Session logic
+│   ├── .env             SECRET_KEY (create this, do not commit)
+│   └── cravify.db       SQLite database (auto-created)
+│
+└── hearth-frontend/
+    ├── src/
+    │   ├── api/         Axios client and endpoint calls
+    │   ├── components/  Layout, ProtectedRoute, Safety prompt
+    │   ├── context/     AuthContext — token and user state
+    │   ├── pages/       AuthPage, DashboardPage, CheckinPage, CravingPage
+    │   └── styles/      Global CSS variables and base reset
+    ├── vite.config.js   Dev proxy config
+    └── package.json
+```
+
+---
+
 ## Roadmap
 
-- ~~Data exporting to CSV~~ - complete
-- ~~FastAPI backend~~ - complete
-- ~~JWT authentication~~ - complete
-- ~~Brute force lockout~~ - complete
-- React frontend for easy to use UI
+- ~~Data exporting to CSV~~ — complete
+- ~~FastAPI backend~~ — complete
+- ~~JWT authentication~~ — complete
+- ~~React frontend~~ — complete
+- Brute force lockout
 - Structured audit logging
 - PostgreSQL migration
 - Docker containerization
 - GitHub Actions CI/CD pipeline
+- Next.js migration for server-side rendering
 - ML relapse prediction
+
+---
 
 ## Important Note
 
@@ -55,4 +174,4 @@ This tool is not a diagnostic instrument and does not provide professional menta
 It is intended to support mindfulness around personal needs and emotional patterns only.
 It is scoped to behavioral addictions with no physical withdrawal risk.
 
-If you are experiencing a mental health crisis or thoughts of self-harm, call or text 988 (US).
+If you are experiencing a mental health crisis or thoughts of self-harm, call or text **988** (US).
