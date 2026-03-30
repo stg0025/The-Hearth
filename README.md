@@ -21,19 +21,16 @@ The approach is trauma-informed and focuses on unmet needs rather than surface l
 
 ## Tech Stack
 
-**Backend:** Python, FastAPI, SQLite, bcrypt, PyJWT, python-dotenv  
-**Frontend:** React, Vite, Recharts, Axios
+**Backend:** Python 3.10+, FastAPI, SQLite, bcrypt, PyJWT, python-dotenv  
+**Frontend:** React (Vite), Recharts, Axios
 
 ## Security
 
-- bcrypt password hashing with unique salt per user
-- Plaintext passwords are never stored or transmitted
-- SQL injection prevention via `?` placeholders on all queries
-- JWT authentication with 24hr expiry
-- `SECRET_KEY` stored in environment variable
-- Protected endpoints (`/checkin`, `/craving`, `/dashboard`) require a valid bearer token
-- All data stored locally in SQLite with no network exposure in V1
-
+- **Bcrypt Hashing:** Password hashing with unique salt per user; plaintext passwords are never stored or transmitted.
+- **Injection Prevention:** SQL injection protection via `?` placeholders on all SQLite queries.
+- **JWT Authentication:** Token-based authentication with 24hr expiry and `SECRET_KEY` environment isolation.
+- **Protected Endpoints:** Strict Bearer token requirements for `/checkin`, `/craving`, and `/dashboard`.
+- **Local Storage:** Current version stores data in a local SQLite instance with no network exposure.
 ---
 
 ## Prerequisites
@@ -158,12 +155,11 @@ The-Hearth/
 - ~~FastAPI backend~~ — complete
 - ~~JWT authentication~~ — complete
 - ~~React frontend~~ — complete
-- Brute force lockout
-- Structured audit logging
 - PostgreSQL migration
 - Docker containerization
+- Brute force lockout
+- Structured audit logging
 - GitHub Actions CI/CD pipeline
-- Next.js migration for server-side rendering
 - ML relapse prediction
 
 ---
