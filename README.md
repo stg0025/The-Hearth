@@ -149,20 +149,6 @@ The-Hearth/
 
 ---
 
-## Roadmap
-
-- ~~Data exporting to CSV~~ — complete
-- ~~FastAPI backend~~ — complete
-- ~~JWT authentication~~ — complete
-- ~~React frontend~~ — complete
-- PostgreSQL migration
-- Docker containerization
-- Brute force lockout
-- Structured audit logging
-- GitHub Actions CI/CD pipeline
-- ML relapse prediction
-
----
 
 ## Important Note
 
